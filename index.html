@@ -35,7 +35,7 @@
                 <i class="fas fa-cloud-upload-alt text-3xl text-teal-600"></i>
             </div>
             <h1 class="text-2xl font-bold text-slate-800">Madani Tracker</h1>
-            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Secure Cloud Sync</p>
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Secure & Offline Ready</p>
         </div>
 
         <div class="space-y-4" id="login-form">
@@ -50,17 +50,21 @@
             
             <p id="auth-error" class="text-center text-red-500 text-xs font-bold hidden"></p>
 
-            <button onclick="handleLogin()" id="btn-login" class="w-full bg-teal-600 text-white py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform">Log In</button>
+            <button onclick="handleLogin()" id="btn-login" class="w-full bg-teal-600 text-white py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform">Log In (Cloud)</button>
             <button onclick="handleSignup()" id="btn-signup" class="w-full bg-white text-teal-600 border border-teal-100 py-3.5 rounded-xl font-bold shadow-sm active:scale-95 transition-transform">Create Account</button>
-        </div>
+        
+            <div class="relative flex py-2 items-center">
+                <div class="flex-grow border-t border-slate-200"></div>
+                <span class="flex-shrink-0 mx-4 text-slate-300 text-[10px] font-bold uppercase">OR</span>
+                <div class="flex-grow border-t border-slate-200"></div>
+            </div>
 
-        <!-- Offline Fallback Message -->
-        <div id="offline-msg" class="hidden text-center mt-6 p-4 bg-orange-50 rounded-xl border border-orange-100">
-            <p class="text-xs text-orange-600 font-bold mb-2">⚠️ Cloud Service Unavailable</p>
-            <button onclick="startGuestMode()" class="text-[10px] bg-orange-200 text-orange-800 px-3 py-1 rounded-lg font-bold">Use Offline Mode</button>
+            <button onclick="startGuestMode()" class="w-full bg-orange-50 text-orange-600 border border-orange-100 py-3.5 rounded-xl font-bold shadow-sm active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <i class="fas fa-user-secret"></i> Continue Offline / Guest
+            </button>
         </div>
         
-        <p class="text-center text-[10px] text-slate-300 mt-8">Your data is safe on the cloud.</p>
+        <p class="text-center text-[10px] text-slate-300 mt-8">Your data is safe.</p>
     </div>
 
     <!-- === MAIN APP CONTAINER (After Login) === -->
@@ -183,6 +187,9 @@
     <!-- UTILITY MODALS -->
     <div id="summary-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 fade-in"><div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl"><div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2"><h3 class="font-bold text-lg text-slate-800" id="summary-title">Summary</h3><button onclick="document.getElementById('summary-modal').classList.add('hidden')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 flex items-center justify-center"><i class="fas fa-times"></i></button></div><div id="summary-content" class="space-y-3 max-h-96 overflow-y-auto no-scrollbar"></div></div></div>
     
+    <!-- RESTORE CONFIRM MODAL -->
+    <div id="restore-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 fade-in"><div class="bg-white w-full max-w-xs rounded-2xl p-5 shadow-2xl text-center"><h3 class="font-bold text-lg text-slate-800 mb-2">Restore Backup</h3><p class="text-xs text-slate-500 mb-4">How do you want to restore data?</p><div class="flex flex-col gap-2"><button onclick="confirmRestore('merge')" class="w-full py-3 bg-blue-50 text-blue-600 rounded-xl text-xs font-bold border border-blue-100">Merge (Keep Existing)</button><button onclick="confirmRestore('replace')" class="w-full py-3 bg-red-50 text-red-600 rounded-xl text-xs font-bold border border-red-100">Replace (Clear Existing)</button><button onclick="document.getElementById('restore-modal').classList.add('hidden')" class="w-full py-3 text-slate-400 text-xs font-bold">Cancel</button></div></div></div>
+
     <!-- WUSOOL MODAL -->
     <div id="wusool-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4 fade-in"><div class="bg-white w-full max-w-xs rounded-2xl p-5 shadow-2xl"><div class="flex justify-between items-center mb-4 border-b border-slate-50 pb-2"><h3 class="font-bold text-lg text-slate-800" id="wusool-modal-title">Receive Money</h3><button onclick="document.getElementById('wusool-modal').classList.add('hidden')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center"><i class="fas fa-times"></i></button></div><p class="text-xs text-slate-500 mb-2 font-bold" id="wusool-msg">Settling...</p><input type="hidden" id="wusool-person-name"><label class="block text-[10px] font-bold text-emerald-600 uppercase mb-2 ml-1">Received Amount</label><div class="flex gap-2 mb-3"><input type="number" id="wusool-amount" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-lg font-bold text-slate-800 focus:outline-none focus:border-teal-500"><button onclick="settleFull()" class="bg-emerald-100 text-emerald-700 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap active:scale-95">Full</button></div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1">Deposit To</label><select id="wusool-account" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold mb-4"><option value="Cash">Cash</option><option value="Bank">Bank Account</option></select><div class="flex gap-2"><button onclick="document.getElementById('wusool-modal').classList.add('hidden')" class="flex-1 py-2 text-slate-500 font-bold text-xs bg-slate-100 rounded-lg">Cancel</button><button onclick="confirmWusool()" class="flex-1 py-2 text-white font-bold text-xs bg-emerald-600 rounded-lg">Confirm</button></div></div></div>
     
@@ -261,20 +268,36 @@
         };
 
         window.handleLogout = () => {
-            if(isCloudAvailable) signOut(auth);
-            else location.reload(); // Simple reload for offline logout
+            if(currentUser && isCloudAvailable) signOut(auth);
+            else {
+                // Clear guest mode flag
+                localStorage.removeItem('isGuest');
+                location.reload(); 
+            }
         };
 
         window.startGuestMode = () => {
+             localStorage.setItem('isGuest', 'true');
              document.getElementById('auth-container').style.display = 'none';
              document.getElementById('app-container').style.display = 'block';
-             document.getElementById('user-email-display').innerText = "Guest Mode";
+             document.getElementById('user-email-display').innerText = "Guest (Offline)";
              initAppData(true); // true = offline mode
         };
+        
+        // Check for Auto-Guest Login on Startup
+        window.checkGuestSession = () => {
+             if(localStorage.getItem('isGuest') === 'true') {
+                 startGuestMode();
+                 return true;
+             }
+             return false;
+        };
 
-        // Auth Listener
+        // Auth Listener or Guest Check
         if(isCloudAvailable) {
             onAuthStateChanged(auth, (user) => {
+                if(localStorage.getItem('isGuest') === 'true') return; // Ignore firebase if guest is set
+
                 const authDiv = document.getElementById('auth-container');
                 const appDiv = document.getElementById('app-container');
                 if (user) {
@@ -293,7 +316,15 @@
             // Show offline msg on auth screen
             document.getElementById('offline-msg').classList.remove('hidden');
             document.getElementById('login-form').classList.add('opacity-50', 'pointer-events-none');
+            // If offline, check guest session
+            if(!checkGuestSession()) {
+                 document.getElementById('auth-container').style.display = 'flex';
+            }
         }
+        
+        // Also run check immediately in case firebase takes time to load or is not available
+        if(!isCloudAvailable) checkGuestSession();
+
 
         // --- Categories Config ---
         const catConfig = {
